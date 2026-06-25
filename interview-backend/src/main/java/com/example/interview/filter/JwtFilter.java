@@ -1,0 +1,54 @@
+package com.example.interview.filter;
+
+import com.example.interview.util.JwtUtil;
+import java.io.IOException;
+import java.util.Collections;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+@Component
+public class JwtFilter extends OncePerRequestFilter {
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+    throws IOException, ServletException {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        try {
+            String token = authHeader.substring(7);
+            Claims claims= Jwts.parserBuilder()
+                    .setSigningKey(JwtUtil.getKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            String email=claims.getSubject();
+            String role=claims.get("role",String.class);
+            System.out.println("User: "+email+ "Role: "+role);
+
+            var authorities=Collections.singletonList(
+                    new SimpleGrantedAuthority("ROLE_"+role)
+            );
+            UsernamePasswordAuthenticationToken auth=
+                    new UsernamePasswordAuthenticationToken(email,null,authorities);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+
+        } catch (Exception e) {
+            System.out.println("Invalid token: " + e.getMessage());
+        }
+
+        chain.doFilter(request, response);
+    }
+}

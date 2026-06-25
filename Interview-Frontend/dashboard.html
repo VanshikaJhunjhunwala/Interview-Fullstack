@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+<h1>Interview Dashboard</h1>
+<button onclick="window.location.href='questions.html'">
+    Questions
+</button>
+<button onclick="window.location.href='add-question.html'">
+    Add Question
+</button>
+<button onclick="window.location.href='interview.html'">
+    Start Interview
+</button>
+<button onclick="window.location.href='history.html'">
+    Interview History
+</button>
+<button onclick="window.location.href='summary.html'">
+    Summary
+</button>
+<button onclick="logout()">
+    Logout
+</button>
+<div class="section">
+<h2>👤 My Details</h2>
+<button onclick="loadProfile()">Load My Details</button>
+<div id="profile" class="card"></div>
+</div>
+<div class="section">
+<h2>📊 My Performance</h2>
+<button onclick="loadStats()">
+    Load My Stats
+</button>
+<div id="dashboard" class="card"></div>
+</div>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

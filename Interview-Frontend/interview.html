@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Start Interview</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<h1>Start Interview</h1>
+
+<button onclick="window.location.href='dashboard.html'">
+    Back to Dashboard
+</button>
+
+<hr>
+
+<input type="text"
+       id="topic"
+       placeholder="Topic">
+
+<br><br>
+
+<input type="text"
+       id="difficulty"
+       placeholder="Difficulty">
+
+<br><br>
+<button onclick="loadQuestion()">
+    Load Question
+</button>
+<br><br>
+<h4 id="counter"></h4>
+<h3 id="question"></h3>
+<textarea
+    id="answer"
+    placeholder="Enter your answer"
+    rows="5"
+    cols="50">
+</textarea>
+
+<br><br>
+<button onclick="nextQuestion()">
+    Next Question
+</button>
+<button onclick="startInterview()">
+    Submit Interview
+</button>
+<div id="result"></div>
+
+<script src="js/interview.js"></script>
+</body>
+</html>
