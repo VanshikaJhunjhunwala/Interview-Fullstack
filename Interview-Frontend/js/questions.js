@@ -2,16 +2,28 @@ async function loadQuestions() {
 
     const token = localStorage.getItem("token");
 
-    const response = await fetch(
-        "http://localhost:8080/questions?topic=Java&difficulty=EASY",
-        {
-            headers: {
-                Authorization: "Bearer " + token
-            }
-        }
+    const combos = [
+        ["Java", "Easy"],
+        ["Spring Boot", "Medium"],
+        ["SQL", "Medium"],
+        ["DSA", "Easy"]
+    ];
+
+    const results = await Promise.all(
+        combos.map(async ([topic, difficulty]) => {
+            const response = await fetch(
+                `http://localhost:8080/questions?topic=${encodeURIComponent(topic)}&difficulty=${encodeURIComponent(difficulty)}`,
+                {
+                    headers: {
+                        Authorization: "Bearer " + token
+                    }
+                }
+            );
+            return response.ok ? response.json() : [];
+        })
     );
 
-    const data = await response.json();
+    const data = results.flat().sort((a, b) => a.id - b.id);
 
     let output = "";
 
